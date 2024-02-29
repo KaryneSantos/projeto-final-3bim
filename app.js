@@ -11,7 +11,7 @@ const port = 3000;
 
 // Pagina da Listagem de usuários
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('listagem');
 });
 
 
