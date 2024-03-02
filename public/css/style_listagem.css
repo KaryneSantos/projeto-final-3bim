@@ -1,0 +1,16 @@
+h1{
+    position: relative;
+    top: 2.5vh;
+    left: 1.5vw;
+    width: 20%;
+}
+
+table{
+    position: relative;
+    top: 3vh;
+}
+.novo_usuario{
+    position: absolute;
+    top: 2.5vh;
+    right: 4vw;
+}
