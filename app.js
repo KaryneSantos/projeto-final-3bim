@@ -10,7 +10,8 @@ app.use(express.static('public'));
 
 const port = 3000;
 
-let usuarios = [{}];
+let usuarios = [];
+let id = 0;
 
 // Lista de Estados (BRASIL)
 const estados = [
@@ -28,7 +29,7 @@ const estado_civil = [
 
 // Função para validar CPF
 function validarCPF(cpf){
-    return /^[0-9]{11}$/.test(cpf);
+    return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
 }
 
 // Função para validar Data de Nascimento
@@ -40,17 +41,25 @@ function validarDataNascimento(data){
 
 // Função para validar Renda Mensal
 function validarRendaMensal(renda){
-    return /^\d+(\.\d{1,2})?$/.test(renda);
+    return /^\d+(\,\d{1,2})?$/.test(renda);
 }
 
 
 // Coletando dados dos usuários
 app.post('/cadastrar', (req, res) => {
-    const {nome, cpf, dtnasc, estadoCivil, rendaMensal, logradouro, numero, complemento, estado, cidade} = req.body;
+    const {nome, email, cpf, dtnasc, sexo, estadoCivil, rendaMensal, logradouro, numero, complemento, estado, cidade} = req.body;
+    console.log(req.body.email);
+    console.log(req.body.sexo);
     console.log(req.body.nome);
     console.log(req.body.cpf);
     console.log(req.body.estadoCivil);
     console.log(req.body.rendaMensal);
+
+    if(estados.includes(req.body.estado)){
+        console.log('true');
+    } else {
+        console.log('false');
+    }
     
     let error = null;
 
@@ -59,6 +68,8 @@ app.post('/cadastrar', (req, res) => {
         error = {params: 'nome', msg:'Nome deve conter no mínimo 8 caracteres'};
     } else if(!validarCPF(cpf)){
         error = {params:'cpf', msg:'CPF inválido'};
+    } else if(email === "") {
+        error = {params: 'email', msg: 'Email inválido'}
     } else if(!validarDataNascimento(dtnasc)){
         error = {params: 'dtnasc', msg:'Data de Nascimento inválido'};
     } else if(!estado_civil.includes(req.body.estadoCivil)){
@@ -67,7 +78,7 @@ app.post('/cadastrar', (req, res) => {
         error = {params:'rendaMensal', msg:'Renda mensal inválida'};
     } else if(logradouro.length < 8){
         error = {params:'logradouro', msg:'Logradouro deve conter no mínimo 8 caracteres'};
-    } else if(isNaN(numero)){
+    } else if(isNaN(parseFloat(numero))){
         error = {params:'numero', msg:'Número deve ser um valor númerico'};
     } else if(!estados.includes(estado)){
         error = {params:'estado', msg:'Estado inválido'};
@@ -76,15 +87,16 @@ app.post('/cadastrar', (req, res) => {
     }
 
     if(error){
-        res.render('cadastro', {error, messageCadastroSucesso: null});
+        console.log('Cadastro não realizado.');
+        const messageCadastroError = 'Cadastro não realizado com sucesso.';
+        res.render('cadastro', {error, messageCadastroSucesso: null, messageCadastroError});
     } else {
-        usuarios.push({nome, cpf, dtnasc, estadoCivil, rendaMensal, logradouro, numero, complemento, estado, cidade});
+        usuarios.push({id: ++id, nome, email, cpf, dtnasc, sexo, estadoCivil, rendaMensal, logradouro, numero, complemento, estado, cidade});
         const messageCadastroSucesso = 'Cadastro realizado com sucesso.';
-        res.render('cadastro', {error, messageCadastroSucesso});
+        res.render('cadastro', {error, messageCadastroSucesso, messageCadastroError: null});
         console.log('Cadastro realizado com sucesso.');
     }
 });
-
 // Pagina da Listagem de usuários
 app.get('/', (req, res) => {
     res.render('listagem', {usuarios});
@@ -92,7 +104,7 @@ app.get('/', (req, res) => {
 
 // Pagina de Cadastro
 app.get('/cadastro', (req, res) => {
-    res.render('cadastro', {error: null, messageCadastroSucesso: null});
+    res.render('cadastro', {error: null, messageCadastroSucesso: null, messageCadastroError: null});
 });
 
 app.listen(port);
