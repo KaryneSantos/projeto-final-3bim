@@ -97,8 +97,32 @@ app.post('/cadastrar', (req, res) => {
         console.log('Cadastro realizado com sucesso.');
     }
 });
+
+// Removendo usuário
+
+app.delete('/deletar/:id', (req, res) => {
+    console.log(usuarios);
+    const { id } = req.params;
+
+    // Encontrar o index do usuário na lista de usuários
+    const index = usuarios.findIndex(usuario => usuario.id === parseInt(id));
+
+    // Verificar se o usuário foi encontrado
+    if (index == -1) {
+        console.log('Usuário não encontrado');
+    } else {
+        usuarios.splice(index, 1);
+        console.log('Usuário removido com sucesso');
+    }
+
+    res.send('Operação concluída');
+});
+
+
+
+
 // Pagina da Listagem de usuários
-app.get('/', (req, res) => {
+app.get('/', (req, res) => {    
     res.render('listagem', {usuarios});
 });
 

@@ -28,14 +28,21 @@
         </thead>
         <tbody>
           <tr>
-            <th scope="row">1</th>
-            <td>Daniel</td>
-            <td>daniel@gmail.com</td>
-            <td>29/12/2006</td>
-            <td>masculino</td>
+            <!-- Mostrar a lista de usuários -->
+            <% usuarios.forEach((usuario) => { %>
+              <% if(!isNaN(new Date(usuario.dtnasc).getTime())) { %>
+                <tr>
+                  <td><%= usuario.id %></td>
+                  <td><%= usuario.nome %></td>
+                  <td><%= usuario.email %></td>
+                  <td><%= new Date(usuario.dtnasc).toLocaleDateString('pt-BR', {timeZone: 'UTC'} ) %></td>
+                  <td><%= usuario.sexo %></td>
+                  <td><button type="button" class="btn btn-primary">Atualizar</button></td>
+                  <td><button type="button" onclick="removerUsuario('<%= usuario.id %>')" class="btn btn-danger">Excluir</button></td>
+                </tr>
+            <% } %>
+            <% }); %>
             
-            <td><button type="button" class="btn btn-primary">Atualizar</button></td>
-            <td><button type="button" class="btn btn-danger">Remover</button></td>
           </tr>
         </tbody>
       </table>
