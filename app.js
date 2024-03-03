@@ -133,3 +133,5 @@ app.get('/cadastro', (req, res) => {
 
 app.listen(port);
 console.log('iniciou...');
+
+module.exports = app;
