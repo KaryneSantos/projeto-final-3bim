@@ -65,7 +65,7 @@ app.post('/cadastrar', (req, res) => {
 
     // Iniciando as validações
     if(nome && nome.length < 3){
-        error = {params: 'nome', msg:'Nome deve conter no mínimo 8 caracteres'};
+        error = {params: 'nome', msg:'Nome deve conter no mínimo 3 caracteres'};
     } else if(!validarCPF(cpf)){
         error = {params:'cpf', msg:'CPF inválido'};
     } else if(email === "") {
