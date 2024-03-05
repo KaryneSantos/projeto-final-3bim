@@ -77,13 +77,13 @@ app.post('/cadastrar', (req, res) => {
     } else if(!validarRendaMensal(req.body.rendaMensal)){
         error = {params:'rendaMensal', msg:'Renda mensal inválida'};
     } else if(logradouro.length < 8){
-        error = {params:'logradouro', msg:'Logradouro deve conter no mínimo 8 caracteres'};
+        error = {params:'logradouro', msg:'Logradouro deve conter no mínimo 3 caracteres'};
     } else if(isNaN(parseFloat(numero))){
         error = {params:'numero', msg:'Número deve ser um valor númerico'};
     } else if(!estados.includes(estado)){
         error = {params:'estado', msg:'Estado inválido'};
     } else if(cidade.length < 3){
-        error = {params:'cidade', msg:'Cidade deve conter no mínimo 8 caracteres'};
+        error = {params:'cidade', msg:'Cidade deve conter no mínimo 3 caracteres'};
     }
 
     if(error){
